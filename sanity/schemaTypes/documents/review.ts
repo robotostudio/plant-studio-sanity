@@ -18,9 +18,16 @@ export const review = defineType({
     }),
     defineField({
       name: 'rating',
-      title: 'Rating (1 to 5)',
+      title: 'Rating (0.5 to 5, in half steps)',
       type: 'number',
-      validation: (rule) => rule.required().integer().min(1).max(5),
+      validation: (rule) =>
+        rule
+          .required()
+          .min(0.5)
+          .max(5)
+          .custom((value) =>
+            value === undefined || Number.isInteger(value * 2) ? true : 'Use half steps, like 3.5',
+          ),
     }),
     defineField({
       name: 'text',

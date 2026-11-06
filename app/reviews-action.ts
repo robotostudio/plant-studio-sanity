@@ -23,8 +23,8 @@ export async function submitReview(
   const text = String(formData.get('text') ?? '').trim().slice(0, 2000)
   const rating = Number(formData.get('rating'))
 
-  if (!reviewer || !text || !Number.isInteger(rating) || rating < 1 || rating > 5) {
-    return {status: 'error', message: 'Please add your name, a rating from 1 to 5 and your review.'}
+  if (!reviewer || !text || !Number.isInteger(rating * 2) || rating < 0.5 || rating > 5) {
+    return {status: 'error', message: 'Please add your name, a star rating and your review.'}
   }
 
   const writeToken = process.env.SANITY_API_WRITE_TOKEN

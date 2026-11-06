@@ -2,6 +2,7 @@
 
 import {useActionState} from 'react'
 
+import StarRatingInput from '@/app/components/StarRatingInput'
 import {submitReview, type ReviewFormState} from '@/app/reviews-action'
 
 const initialState: ReviewFormState = {status: 'idle', message: ''}
@@ -28,24 +29,10 @@ export default function ReviewForm() {
           className="rounded-lg border border-gray-300 px-3 py-2"
         />
       </label>
-      <label className="grid gap-1 text-gray-900">
-        Rating
-        <select
-          name="rating"
-          required
-          defaultValue=""
-          className="rounded-lg border border-gray-300 px-3 py-2"
-        >
-          <option value="" disabled>
-            Choose 1 to 5
-          </option>
-          {[5, 4, 3, 2, 1].map((n) => (
-            <option key={n} value={n}>
-              {n} {n === 1 ? 'star' : 'stars'}
-            </option>
-          ))}
-        </select>
-      </label>
+      <fieldset className="grid gap-1 text-gray-900">
+        <legend>Rating</legend>
+        <StarRatingInput name="rating" />
+      </fieldset>
       <label className="grid gap-1 text-gray-900">
         Your review
         <textarea

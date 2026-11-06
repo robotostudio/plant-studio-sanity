@@ -2,6 +2,7 @@ import type {Metadata} from 'next'
 import {defineQuery} from 'next-sanity'
 
 import DateComponent from '@/app/components/Date'
+import Stars from '@/app/components/Stars'
 import ReviewForm from '@/app/components/ReviewForm'
 import {sanityFetch} from '@/sanity/lib/live'
 
@@ -26,10 +27,7 @@ export default async function ReviewsPage() {
         <ul role="list" className="pt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {reviews.map((review) => (
             <li key={review._id} className="rounded-lg border border-gray-200 p-6">
-              <p aria-label={`${review.rating} out of 5`} className="text-lg">
-                {'★'.repeat(review.rating)}
-                <span className="text-gray-300">{'★'.repeat(5 - review.rating)}</span>
-              </p>
+              <Stars value={review.rating} />
               <p className="mt-3 text-gray-900">{review.text}</p>
               <p className="mt-4 text-sm text-gray-600">
                 {review.reviewer}
