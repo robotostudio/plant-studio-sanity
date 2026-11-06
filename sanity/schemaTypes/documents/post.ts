@@ -39,7 +39,7 @@ export const post = defineType({
     }),
     defineField({
       name: 'excerpt',
-      title: 'Excerpt',
+      title: 'Summary',
       type: 'text',
     }),
     defineField({
