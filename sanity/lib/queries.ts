@@ -63,6 +63,10 @@ export const getPageQuery = defineQuery(`
           }
         }
       },
+      _type == "faqSection" => {
+        ...,
+        "items": items[]->{_id, question, answer}
+      },
     },
   }
 `)
