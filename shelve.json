@@ -1,0 +1,14 @@
+{
+  "$schema": "https://shelve.cloud/schema.json",
+  "project": "plant-studio-sanity",
+  "slug": "robotostudio",
+  "defaultEnv": "development",
+  "envFileName": ".env.local",
+  "sync": {
+    "protectedEnvironments": ["production"],
+    "environments": {
+      "development": { "sourceOfTruth": "local" },
+      "production": { "sourceOfTruth": "remote", "allowPush": false, "pullMode": "merge" }
+    }
+  }
+}
