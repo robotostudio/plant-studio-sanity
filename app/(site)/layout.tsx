@@ -49,6 +49,9 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       images: ogImage ? [ogImage] : [],
     },
+    alternates: {
+      types: {'application/rss+xml': [{url: '/posts/rss.xml', title: `${title} posts`}]},
+    },
   }
 }
 
