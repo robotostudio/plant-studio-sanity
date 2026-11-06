@@ -1,14 +1,35 @@
 'use client'
 
-import {useActionState} from 'react'
+import {useState, type FormEvent} from 'react'
 
 import StarRatingInput from '@/app/components/StarRatingInput'
-import {submitReview, type ReviewFormState} from '@/app/reviews-action'
 
-const initialState: ReviewFormState = {status: 'idle', message: ''}
+type FormState = {status: 'idle' | 'success' | 'error'; message: string}
 
 export default function ReviewForm() {
-  const [state, formAction, pending] = useActionState(submitReview, initialState)
+  const [state, setState] = useState<FormState>({status: 'idle', message: ''})
+  const [pending, setPending] = useState(false)
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setPending(true)
+    try {
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(Object.fromEntries(new FormData(event.currentTarget))),
+      })
+      const data: {message?: string} = await response.json().catch(() => ({}))
+      setState({
+        status: response.ok ? 'success' : 'error',
+        message: data.message ?? 'Something went wrong. Please try again.',
+      })
+    } catch {
+      setState({status: 'error', message: 'Something went wrong. Please try again.'})
+    } finally {
+      setPending(false)
+    }
+  }
 
   if (state.status === 'success') {
     return (
@@ -19,7 +40,7 @@ export default function ReviewForm() {
   }
 
   return (
-    <form action={formAction} className="grid gap-5 max-w-xl">
+    <form onSubmit={onSubmit} className="grid gap-5 max-w-xl">
       <label className="grid gap-1 text-gray-900">
         Your name
         <input
