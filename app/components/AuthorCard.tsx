@@ -17,9 +17,7 @@ export default function AuthorCard({author}: {author: AuthorCardData}) {
       data-sanity={dataAttr({id: _id, type: 'person', path: 'firstName'}).toString()}
       className="border border-gray-200 rounded-sm p-6 bg-gray-50 flex flex-col gap-4 transition-colors hover:bg-white relative"
     >
-      <Link className="hover:text-brand transition-colors" href={`/authors/${slug}`}>
-        <span className="absolute inset-0 z-10" />
-      </Link>
+      <Link aria-label={name} className="absolute inset-0 z-10" href={`/authors/${slug}`} />
       <div className="flex items-center gap-4">
         {picture?.asset?._ref ? (
           <Image
@@ -37,7 +35,7 @@ export default function AuthorCard({author}: {author: AuthorCardData}) {
         )}
         <div>
           <h3 className="text-2xl">{name}</h3>
-          <p className="text-gray-500 text-xs font-mono">
+          <p className="text-gray-500 text-xs font-mono tabular-nums">
             {postCount} {postCount === 1 ? 'post' : 'posts'}
           </p>
         </div>

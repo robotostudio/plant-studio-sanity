@@ -28,14 +28,14 @@ export default async function Page() {
                 </div>
                 <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-black">
                   <Link
-                    className="underline decoration-brand hover:text-brand underline-offset-8 hover:underline-offset-4 transition-all ease-out"
+                    className="underline decoration-brand hover:text-brand underline-offset-8 hover:underline-offset-4 transition-[color,text-underline-offset] duration-150 ease-out"
                     href="https://sanity.io/"
                   >
                     Sanity
                   </Link>
                   +
                   <Link
-                    className="underline decoration-black text-framework underline-offset-8 hover:underline-offset-4 transition-all ease-out"
+                    className="underline decoration-black text-framework underline-offset-8 hover:underline-offset-4 transition-[text-underline-offset] duration-150 ease-out"
                     href="https://nextjs.org/"
                   >
                     Next.js

@@ -42,7 +42,7 @@ export default async function PostsPage(props: PageProps<'/posts'>) {
   return (
     <div className="container py-12 sm:py-20">
       <h1 className="text-4xl text-gray-900 sm:text-5xl lg:text-6xl">All posts</h1>
-      <p className="mt-2 text-lg leading-8 text-gray-600" aria-live="polite">
+      <p className="mt-2 text-lg leading-8 text-gray-600 tabular-nums" aria-live="polite">
         {term
           ? `${count} ${count === 1 ? 'result' : 'results'} for "${term}"`
           : `${count} ${count === 1 ? 'post' : 'posts'}, newest first.`}
@@ -73,7 +73,7 @@ export default async function PostsPage(props: PageProps<'/posts'>) {
           className="mt-12 flex items-center justify-between border-t border-gray-200 pt-6 font-mono text-sm"
         >
           {page > 1 ? (
-            <Link href={pageHref(page - 1)} className="rounded-full border border-black py-3 px-6 font-mono hover:bg-black hover:text-white focus:bg-black focus:text-white transition-colors duration-200">
+            <Link href={pageHref(page - 1)} className="rounded-full border border-black py-3 px-6 font-mono hover:bg-black hover:text-white focus:bg-black focus:text-white transition-[color,background-color,transform] duration-150 ease-out active:scale-[0.97] motion-reduce:transform-none">
               Previous
             </Link>
           ) : (
@@ -83,7 +83,7 @@ export default async function PostsPage(props: PageProps<'/posts'>) {
             Page {page} of {pageCount}
           </span>
           {page < pageCount ? (
-            <Link href={pageHref(page + 1)} className="rounded-full border border-black py-3 px-6 font-mono hover:bg-black hover:text-white focus:bg-black focus:text-white transition-colors duration-200">
+            <Link href={pageHref(page + 1)} className="rounded-full border border-black py-3 px-6 font-mono hover:bg-black hover:text-white focus:bg-black focus:text-white transition-[color,background-color,transform] duration-150 ease-out active:scale-[0.97] motion-reduce:transform-none">
               Next
             </Link>
           ) : (

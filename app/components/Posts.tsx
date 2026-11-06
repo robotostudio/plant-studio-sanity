@@ -20,9 +20,7 @@ export const Post = ({post}: {post: PostCard}) => {
       key={_id}
       className="border border-gray-200 rounded-sm p-6 bg-gray-50 flex flex-col justify-between transition-colors hover:bg-white relative"
     >
-      <Link className="hover:text-brand underline transition-colors" href={`/posts/${slug}`}>
-        <span className="absolute inset-0 z-10" />
-      </Link>
+      <Link aria-label={title} className="absolute inset-0 z-10" href={`/posts/${slug}`} />
       <div>
         <h3 className="text-2xl mb-4">{title}</h3>
 
@@ -37,9 +35,9 @@ export const Post = ({post}: {post: PostCard}) => {
             <Avatar person={author} small={true} />
           </Link>
         )}
-        <time className="text-gray-500 text-xs font-mono" dateTime={date}>
+        <span className="text-gray-500 text-xs font-mono">
           <DateComponent dateString={date} />
-        </time>
+        </span>
       </div>
     </article>
   )
@@ -103,7 +101,7 @@ export const LatestPosts = async () => {
       <div className="pt-4">
         <Link
           href="/posts"
-          className="rounded-full inline-flex gap-2 font-mono whitespace-nowrap items-center bg-black hover:bg-blue focus:bg-blue py-3 px-6 text-white transition-colors duration-200"
+          className="rounded-full inline-flex gap-2 font-mono whitespace-nowrap items-center bg-black hover:bg-blue focus:bg-blue py-3 px-6 text-white transition-[background-color,transform] duration-150 ease-out active:scale-[0.97] motion-reduce:transform-none"
         >
           See all posts
         </Link>

@@ -12,14 +12,14 @@ export default function MobileMenu({links}: {links: NavLink[]}) {
   const panelId = useId()
 
   return (
-    <div className="md:hidden">
+    <div className="md:hidden" onKeyDown={(event) => event.key === 'Escape' && setOpen(false)}>
       <button
         type="button"
         aria-expanded={open}
         aria-controls={panelId}
         aria-label={open ? 'Close menu' : 'Open menu'}
         onClick={() => setOpen((value) => !value)}
-        className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white hover:border-black transition-colors"
+        className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white hover:border-black transition-[border-color,transform] duration-150 ease-out active:scale-[0.97] motion-reduce:transform-none"
       >
         <svg
           aria-hidden="true"

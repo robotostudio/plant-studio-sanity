@@ -28,7 +28,7 @@ export default async function Faq() {
               <span>{item.question}</span>
               <span
                 aria-hidden="true"
-                className="font-mono text-2xl text-gray-500 transition-transform group-open:rotate-45"
+                className="font-mono text-2xl text-gray-500 transition-transform duration-150 ease-out group-open:rotate-45 motion-reduce:transition-none"
               >
                 +
               </span>

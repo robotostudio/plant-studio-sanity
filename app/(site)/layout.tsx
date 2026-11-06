@@ -1,7 +1,7 @@
 import '../globals.css'
 
 import {SpeedInsights} from '@vercel/speed-insights/next'
-import type {Metadata} from 'next'
+import type {Metadata, Viewport} from 'next'
 import {Inter, IBM_Plex_Mono} from 'next/font/google'
 import {draftMode} from 'next/headers'
 import {toPlainText} from 'next-sanity'
@@ -52,6 +52,13 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#ffffff',
+}
+
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
@@ -71,7 +78,7 @@ export default async function RootLayout({children}: LayoutProps<'/'>) {
   return (
     <html lang="en" className={`${inter.variable} ${ibmPlexMono.variable} bg-white text-black`}>
       <body>
-        <section className="min-h-screen pt-24">
+        <section className="min-h-svh pt-24">
           {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
           <Toaster />
           {isDraftMode && (
@@ -83,8 +90,14 @@ export default async function RootLayout({children}: LayoutProps<'/'>) {
           )}
           {/* The <SanityLive> component is responsible for making all sanityFetch calls in your application live, so should always be rendered. */}
           <SanityLive onError={handleError} />
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:rounded-full focus:bg-black focus:px-5 focus:py-3 focus:font-mono focus:text-white"
+          >
+            Skip to content
+          </a>
           <Header />
-          <main className="">{children}</main>
+          <main id="main">{children}</main>
           <Footer />
         </section>
         <SpeedInsights />

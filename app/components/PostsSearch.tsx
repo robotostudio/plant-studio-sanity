@@ -58,7 +58,8 @@ export default function PostsSearch() {
         onChange={(event) => onChange(event.target.value)}
         placeholder="Search posts"
         autoComplete="off"
-        className="w-full rounded-full border border-gray-200 bg-white px-5 py-3 font-mono text-sm focus:border-black focus:outline-none"
+        enterKeyHint="search"
+        className="w-full rounded-full border border-gray-200 bg-white px-5 py-3 font-mono text-base md:text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
       />
     </form>
   )
