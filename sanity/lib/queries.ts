@@ -155,3 +155,13 @@ export const faqQuery = defineQuery(`
     answer
   }
 `)
+
+export const postOgQuery = defineQuery(`
+  *[_type == "post" && slug.current == $slug] [0] {
+    "title": coalesce(title, "Untitled"),
+    excerpt,
+    coverImage,
+    "date": coalesce(date, _updatedAt),
+    "author": author->{firstName, lastName},
+  }
+`)

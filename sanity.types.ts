@@ -999,6 +999,27 @@ export type FaqQueryResult = Array<{
   answer: string;
 }>;
 
+// Source: sanity/lib/queries.ts
+// Variable: postOgQuery
+// Query: *[_type == "post" && slug.current == $slug] [0] {    "title": coalesce(title, "Untitled"),    excerpt,    coverImage,    "date": coalesce(date, _updatedAt),    "author": author->{firstName, lastName},  }
+export type PostOgQueryResult = {
+  title: string;
+  excerpt: string | null;
+  coverImage: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  date: string;
+  author: {
+    firstName: string;
+    lastName: string;
+  } | null;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -1018,5 +1039,6 @@ declare module "@sanity/client" {
     '\n  *[_type == "person" && defined(slug.current)] {"slug": slug.current}\n': AuthorSlugsQueryResult;
     '\n  *[_type == "person" && slug.current == $slug] [0] {\n    \n  _id,\n  firstName,\n  lastName,\n  "slug": slug.current,\n  picture,\n  bio,\n  "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),\n\n    "posts": *[_type == "post" && references(^._id) && defined(slug.current)] | order(date desc, _updatedAt desc) {\n      \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n    }\n  }\n': AuthorQueryResult;
     '\n  *[_type == "faq" && defined(question)] | order(_createdAt asc) {\n    _id,\n    question,\n    answer\n  }\n': FaqQueryResult;
+    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    "title": coalesce(title, "Untitled"),\n    excerpt,\n    coverImage,\n    "date": coalesce(date, _updatedAt),\n    "author": author->{firstName, lastName},\n  }\n': PostOgQueryResult;
   }
 }
