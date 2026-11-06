@@ -1,6 +1,8 @@
 import {StarIcon} from '@sanity/icons'
 import {defineField, defineType} from 'sanity'
 
+import {StarRatingInput} from '../objects/StarRatingInput'
+
 /**
  * Customer reviews. Not shown on any page yet.
  */
@@ -20,6 +22,7 @@ export const review = defineType({
       name: 'rating',
       title: 'Rating (0.5 to 5, in half steps)',
       type: 'number',
+      components: {input: StarRatingInput},
       validation: (rule) =>
         rule
           .required()
