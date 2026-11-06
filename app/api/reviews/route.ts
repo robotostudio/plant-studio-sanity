@@ -1,6 +1,20 @@
 import {createClient} from '@sanity/client'
+import {z} from 'zod'
 
 import {apiVersion, dataset, projectId} from '@/sanity/lib/api'
+
+const reviewSchema = z.object({
+  reviewer: z.string().trim().min(1).max(100),
+  text: z.string().trim().min(1).max(2000),
+  // Half-star steps from 0.5 to 5.
+  rating: z.coerce
+    .number()
+    .min(0.5)
+    .max(5)
+    .refine((value) => Number.isInteger(value * 2)),
+  // Hidden spam-trap field: real visitors leave it empty.
+  website: z.string().optional(),
+})
 
 /**
  * Receives a review from the Reviews page and saves it in Sanity as an
@@ -8,27 +22,26 @@ import {apiVersion, dataset, projectId} from '@/sanity/lib/api'
  * in the Studio.
  */
 export async function POST(request: Request) {
-  let body: Record<string, unknown>
+  let body: unknown
   try {
     body = await request.json()
   } catch {
     return Response.json({message: 'Invalid request.'}, {status: 400})
   }
 
-  // Hidden field that real visitors never fill in; bots often do.
-  if (String(body.website ?? '').trim() !== '') {
-    return Response.json({message: 'Thank you! Your review has been sent.'})
-  }
+  const parsed = reviewSchema.safeParse(body)
 
-  const reviewer = String(body.reviewer ?? '').trim().slice(0, 100)
-  const text = String(body.text ?? '').trim().slice(0, 2000)
-  const rating = Number(body.rating)
-
-  if (!reviewer || !text || !Number.isInteger(rating * 2) || rating < 0.5 || rating > 5) {
+  if (!parsed.success) {
     return Response.json(
       {message: 'Please add your name, a star rating and your review.'},
       {status: 400},
     )
+  }
+
+  const {reviewer, text, rating, website} = parsed.data
+
+  if (website && website.trim() !== '') {
+    return Response.json({message: 'Thank you! Your review has been sent.'})
   }
 
   const writeToken = process.env.SANITY_API_WRITE_TOKEN
