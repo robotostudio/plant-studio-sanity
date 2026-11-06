@@ -1,4 +1,4 @@
-import type {Metadata, ResolvingMetadata} from 'next'
+import type {Metadata} from 'next'
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import {type PortableTextBlock} from 'next-sanity'
@@ -10,7 +10,6 @@ import PortableText from '@/app/components/PortableText'
 import Image from '@/app/components/SanityImage'
 import {sanityFetch} from '@/sanity/lib/live'
 import {postPagesSlugs, postQuery} from '@/sanity/lib/queries'
-import {resolveOpenGraphImage} from '@/sanity/lib/utils'
 
 /**
  * Generate the static params for the page.
@@ -30,10 +29,7 @@ export async function generateStaticParams() {
  * Generate metadata for the page.
  * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
  */
-export async function generateMetadata(
-  props: PageProps<'/posts/[slug]'>,
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<'/posts/[slug]'>): Promise<Metadata> {
   const params = await props.params
   const {data: post} = await sanityFetch({
     query: postQuery,
@@ -41,9 +37,7 @@ export async function generateMetadata(
     // Metadata should never contain stega
     stega: false,
   })
-  const previousImages = (await parent).openGraph?.images || []
-  const ogImage = resolveOpenGraphImage(post?.coverImage)
-
+  // The Open Graph image comes from ./opengraph-image.tsx (cover + title + byline).
   return {
     authors:
       post?.author?.firstName && post?.author?.lastName
@@ -51,9 +45,6 @@ export async function generateMetadata(
         : [],
     title: post?.title,
     description: post?.excerpt,
-    openGraph: {
-      images: ogImage ? [ogImage, ...previousImages] : previousImages,
-    },
   } satisfies Metadata
 }
 
