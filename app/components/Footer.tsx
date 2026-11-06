@@ -1,3 +1,7 @@
+import Link from 'next/link'
+
+import {studioUrl} from '@/sanity/lib/api'
+
 export default function Footer() {
   return (
     <footer className="bg-gray-50 relative">
@@ -8,16 +12,19 @@ export default function Footer() {
             Built with Sanity + Next.js.
           </h3>
           <div className="flex flex-col gap-3 items-center justify-center lg:w-1/2 lg:flex-row lg:pl-4">
+            <Link
+              href={studioUrl}
+              className="rounded-full flex gap-2 font-mono whitespace-nowrap items-center bg-black hover:bg-blue focus:bg-blue py-3 px-6 text-white transition-[background-color,transform] duration-150 ease-out active:scale-[0.97] motion-reduce:transform-none"
+            >
+              Open Studio
+            </Link>
             <a
-              href="https://github.com/sanity-io/sanity-template-nextjs-clean"
-              className="rounded-full flex gap-2 font-mono whitespace-nowrap items-center bg-black hover:bg-blue focus:bg-blue py-3 px-6 text-white transition-colors duration-200"
+              href="https://github.com/robotostudio/plant-studio-sanity"
+              className="mx-3 py-2 hover:underline font-mono"
               target="_blank"
               rel="noopener noreferrer"
             >
               View on GitHub
-            </a>
-            <a href="https://nextjs.org/docs" className="mx-3 hover:underline font-mono">
-              Read Next.js Documentation
             </a>
           </div>
         </div>
