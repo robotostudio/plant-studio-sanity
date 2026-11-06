@@ -17,9 +17,8 @@ const reviewSchema = z.object({
 })
 
 /**
- * Receives a review from the Reviews page and saves it in Sanity as an
- * unpublished draft, so it only appears on the site once someone publishes it
- * in the Studio.
+ * Receives a review from the Reviews page and saves it in Sanity as a
+ * published review, so it shows on the site straight away.
  */
 export async function POST(request: Request) {
   let body: unknown
@@ -55,7 +54,7 @@ export async function POST(request: Request) {
   try {
     const writeClient = createClient({projectId, dataset, apiVersion, useCdn: false, token: writeToken})
     await writeClient.create({
-      _id: `drafts.${crypto.randomUUID()}`,
+      _id: crypto.randomUUID(),
       _type: 'review',
       reviewer,
       rating,
