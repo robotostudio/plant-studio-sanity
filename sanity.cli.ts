@@ -1,19 +1,18 @@
-import { defineCliConfig } from "sanity/cli";
+/**
+ * Sanity CLI config: used by `sanity schema extract` and `sanity typegen generate`.
+ * The Studio itself is embedded in Next.js at /studio (see sanity.config.ts).
+ */
+import {defineCliConfig} from 'sanity/cli'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
 
 export default defineCliConfig({
-  api: { projectId, dataset },
-  vite: {
-    define: {
-      "process.env.NEXT_PUBLIC_SANITY_PROJECT_ID": JSON.stringify(projectId),
-      "process.env.NEXT_PUBLIC_SANITY_DATASET": JSON.stringify(dataset),
-    },
-    resolve: {
-      alias: {
-        "@": __dirname,
-      },
-    },
+  api: {projectId, dataset},
+  typegen: {
+    path: './{app,sanity}/**/*.{ts,tsx,js,jsx}',
+    schema: './schema.json',
+    generates: './sanity.types.ts',
+    overloadClientMethods: true,
   },
-});
+})
