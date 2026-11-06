@@ -12,6 +12,7 @@ import { draftMode } from "next/headers";
 
 import AlertBanner from "./alert-banner";
 import PortableText from "./portable-text";
+import SiteHeader from "./site-header";
 
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
@@ -69,6 +70,7 @@ export default async function RootLayout({
       <body>
         <section className="min-h-screen">
           {isDraftMode && <AlertBanner />}
+          <SiteHeader title={data?.title || demo.title} />
           <main>{children}</main>
           <footer className="bg-accent-1 border-accent-2 border-t">
             <div className="container mx-auto px-5">

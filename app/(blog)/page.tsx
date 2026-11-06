@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import Avatar from "./avatar";
 import CoverImage from "./cover-image";
 import DateComponent from "./date";
+import Faq from "./faq";
 import MoreStories from "./more-stories";
 import Onboarding from "./onboarding";
 import PortableText from "./portable-text";
@@ -102,10 +103,21 @@ export default async function Page() {
             More Stories
           </h2>
           <Suspense>
-            <MoreStories skip={heroPost._id} limit={100} />
+            <MoreStories skip={heroPost._id} limit={4} />
           </Suspense>
+          <div className="mb-32 flex justify-center">
+            <Link
+              href="/posts"
+              className="border border-black bg-black py-3 px-12 font-bold text-white transition-colors duration-200 hover:bg-white hover:text-black"
+            >
+              See all posts
+            </Link>
+          </div>
         </aside>
       )}
+      <Suspense>
+        <Faq />
+      </Suspense>
     </div>
   );
 }

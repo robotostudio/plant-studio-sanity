@@ -13,6 +13,16 @@
  */
 
 // Source: schema.json
+export type Faq = {
+  _id: string;
+  _type: "faq";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  question?: string;
+  answer?: string;
+};
+
 export type Post = {
   _id: string;
   _type: "post";
@@ -69,6 +79,8 @@ export type Author = {
   _updatedAt: string;
   _rev: string;
   name?: string;
+  slug?: Slug;
+  bio?: string;
   picture?: {
     asset?: {
       _ref: string;
@@ -382,7 +394,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = Post | Author | Settings | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = Faq | Post | Author | Settings | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./app/(blog)/posts/[slug]/page.tsx
 // Variable: postSlugs
@@ -453,7 +465,7 @@ export type SettingsQueryResult = {
   };
 } | null;
 // Variable: heroQuery
-// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {    content,      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), picture},  }
+// Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {    content,      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), "slug": slug.current, picture},  }
 export type HeroQueryResult = {
   content: Array<{
     children?: Array<{
@@ -494,6 +506,7 @@ export type HeroQueryResult = {
   date: string;
   author: {
     name: string | "Anonymous";
+    slug: string | null;
     picture: {
       asset?: {
         _ref: string;
@@ -510,7 +523,7 @@ export type HeroQueryResult = {
   } | null;
 } | null;
 // Variable: moreStoriesQuery
-// Query: *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), picture},  }
+// Query: *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), "slug": slug.current, picture},  }
 export type MoreStoriesQueryResult = Array<{
   _id: string;
   status: "draft" | "published";
@@ -533,6 +546,7 @@ export type MoreStoriesQueryResult = Array<{
   date: string;
   author: {
     name: string | "Anonymous";
+    slug: string | null;
     picture: {
       asset?: {
         _ref: string;
@@ -549,7 +563,7 @@ export type MoreStoriesQueryResult = Array<{
   } | null;
 }>;
 // Variable: postQuery
-// Query: *[_type == "post" && slug.current == $slug] [0] {    content,      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), picture},  }
+// Query: *[_type == "post" && slug.current == $slug] [0] {    content,      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), "slug": slug.current, picture},  }
 export type PostQueryResult = {
   content: Array<{
     children?: Array<{
@@ -590,6 +604,7 @@ export type PostQueryResult = {
   date: string;
   author: {
     name: string | "Anonymous";
+    slug: string | null;
     picture: {
       asset?: {
         _ref: string;
@@ -605,6 +620,143 @@ export type PostQueryResult = {
     } | null;
   } | null;
 } | null;
+// Variable: postsQuery
+// Query: *[  _type == "post" && defined(slug.current) && ($q == "" || title match $q || excerpt match $q)] | order(date desc, _updatedAt desc) [$start...$end] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), "slug": slug.current, picture},  }
+export type PostsQueryResult = Array<{
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: string | null;
+  coverImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  date: string;
+  author: {
+    name: string | "Anonymous";
+    slug: string | null;
+    picture: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+  } | null;
+}>;
+// Variable: postsCountQuery
+// Query: count(*[  _type == "post" && defined(slug.current) && ($q == "" || title match $q || excerpt match $q)])
+export type PostsCountQueryResult = number;
+// Variable: authorsQuery
+// Query: *[_type == "author" && defined(slug.current)] | order(name asc) {      _id,  name,  "slug": slug.current,  picture,  bio,  "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),  }
+export type AuthorsQueryResult = Array<{
+  _id: string;
+  name: string | null;
+  slug: string | null;
+  picture: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  bio: string | null;
+  postCount: number;
+}>;
+// Variable: authorSlugsQuery
+// Query: *[_type == "author" && defined(slug.current)] { "slug": slug.current }
+export type AuthorSlugsQueryResult = Array<{
+  slug: string | null;
+}>;
+// Variable: authorQuery
+// Query: *[_type == "author" && slug.current == $slug] [0] {      _id,  name,  "slug": slug.current,  picture,  bio,  "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),    "posts": *[_type == "post" && references(^._id) && defined(slug.current)] | order(date desc, _updatedAt desc) {        _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{"name": coalesce(name, "Anonymous"), "slug": slug.current, picture},    }  }
+export type AuthorQueryResult = {
+  _id: string;
+  name: string | null;
+  slug: string | null;
+  picture: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  bio: string | null;
+  postCount: number;
+  posts: Array<{
+    _id: string;
+    status: "draft" | "published";
+    title: string | "Untitled";
+    slug: string | null;
+    excerpt: string | null;
+    coverImage: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+    date: string;
+    author: {
+      name: string | "Anonymous";
+      slug: string | null;
+      picture: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+    } | null;
+  }>;
+} | null;
+// Variable: faqQuery
+// Query: *[_type == "faq" && defined(question)] | order(_createdAt asc) {    _id,    question,    answer  }
+export type FaqQueryResult = Array<{
+  _id: string;
+  question: string;
+  answer: string | null;
+}>;
 
 // Query TypeMap
 import "@sanity/client";
@@ -612,8 +764,14 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"post\" && defined(slug.current)]{\"slug\": slug.current}": PostSlugsResult;
     "*[_type == \"settings\"][0]": SettingsQueryResult;
-    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {\n    content,\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), picture},\n\n  }\n": HeroQueryResult;
-    "\n  *[_type == \"post\" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), picture},\n\n  }\n": MoreStoriesQueryResult;
-    "\n  *[_type == \"post\" && slug.current == $slug] [0] {\n    content,\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), picture},\n\n  }\n": PostQueryResult;
+    "\n  *[_type == \"post\" && defined(slug.current)] | order(date desc, _updatedAt desc) [0] {\n    content,\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), \"slug\": slug.current, picture},\n\n  }\n": HeroQueryResult;
+    "\n  *[_type == \"post\" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), \"slug\": slug.current, picture},\n\n  }\n": MoreStoriesQueryResult;
+    "\n  *[_type == \"post\" && slug.current == $slug] [0] {\n    content,\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), \"slug\": slug.current, picture},\n\n  }\n": PostQueryResult;
+    "\n  *[\n  _type == \"post\" && defined(slug.current) && ($q == \"\" || title match $q || excerpt match $q)\n] | order(date desc, _updatedAt desc) [$start...$end] {\n    \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), \"slug\": slug.current, picture},\n\n  }\n": PostsQueryResult;
+    "count(*[\n  _type == \"post\" && defined(slug.current) && ($q == \"\" || title match $q || excerpt match $q)\n])": PostsCountQueryResult;
+    "\n  *[_type == \"author\" && defined(slug.current)] | order(name asc) {\n    \n  _id,\n  name,\n  \"slug\": slug.current,\n  picture,\n  bio,\n  \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)]),\n\n  }\n": AuthorsQueryResult;
+    "\n  *[_type == \"author\" && defined(slug.current)] { \"slug\": slug.current }\n": AuthorSlugsQueryResult;
+    "\n  *[_type == \"author\" && slug.current == $slug] [0] {\n    \n  _id,\n  name,\n  \"slug\": slug.current,\n  picture,\n  bio,\n  \"postCount\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)]),\n\n    \"posts\": *[_type == \"post\" && references(^._id) && defined(slug.current)] | order(date desc, _updatedAt desc) {\n      \n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  coverImage,\n  \"date\": coalesce(date, _updatedAt),\n  \"author\": author->{\"name\": coalesce(name, \"Anonymous\"), \"slug\": slug.current, picture},\n\n    }\n  }\n": AuthorQueryResult;
+    "\n  *[_type == \"faq\" && defined(question)] | order(_createdAt asc) {\n    _id,\n    question,\n    answer\n  }\n": FaqQueryResult;
   }
 }
