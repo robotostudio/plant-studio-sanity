@@ -8,6 +8,7 @@ import {settingsQuery} from '@/sanity/lib/queries'
 const navLinks = [
   {href: '/posts', label: 'Posts'},
   {href: '/authors', label: 'Authors'},
+  {href: '/pricing', label: 'Pricing'},
   {href: '/about', label: 'About'},
 ]
 
