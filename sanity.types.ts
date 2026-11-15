@@ -62,6 +62,27 @@ export type CallToAction = {
   contentAlignment?: "textFirst" | "imageFirst";
 };
 
+export type PricingTable = {
+  _type: "pricingTable";
+  heading?: string;
+  subheading?: string;
+  plans?: Array<
+    {
+      _key: string;
+    } & Plan
+  >;
+};
+
+export type Plan = {
+  _type: "plan";
+  name?: string;
+  description?: string;
+  price?: string;
+  period?: string;
+  features?: Array<string>;
+  highlighted?: boolean;
+};
+
 export type FaqReference = {
   _ref: string;
   _type: "reference";
@@ -231,6 +252,9 @@ export type Page = {
     | ({
         _key: string;
       } & FaqSection)
+    | ({
+        _key: string;
+      } & PricingTable)
   >;
 };
 
@@ -529,6 +553,8 @@ export type AllSanitySchemaTypes =
   | Link
   | SanityImageAssetReference
   | CallToAction
+  | PricingTable
+  | Plan
   | FaqReference
   | FaqSection
   | InfoSection
@@ -705,6 +731,17 @@ export type GetPageQueryResult = {
               markDefs: null;
             }
         > | null;
+      }
+    | {
+        _key: string;
+        _type: "pricingTable";
+        heading?: string;
+        subheading?: string;
+        plans?: Array<
+          {
+            _key: string;
+          } & Plan
+        >;
       }
   > | null;
 } | null;
