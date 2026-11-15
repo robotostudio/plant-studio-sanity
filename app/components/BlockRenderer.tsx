@@ -3,6 +3,7 @@ import React from 'react'
 import Cta from '@/app/components/Cta'
 import FaqSectionBlock from '@/app/components/FaqSection'
 import Info from '@/app/components/InfoSection'
+import PricingTable from '@/app/components/PricingTable'
 import {dataAttr} from '@/sanity/lib/utils'
 import {PageBuilderSection} from '@/sanity/lib/types'
 
@@ -21,6 +22,7 @@ const Blocks = {
   callToAction: Cta,
   infoSection: Info,
   faqSection: FaqSectionBlock,
+  pricingTable: PricingTable,
 } as BlocksType
 
 /**

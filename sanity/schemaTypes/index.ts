@@ -5,6 +5,7 @@ import {faq} from './documents/faq'
 import {callToAction} from './objects/callToAction'
 import {infoSection} from './objects/infoSection'
 import {faqSection} from './objects/faqSection'
+import {pricingTable} from './objects/pricingTable'
 import {settings} from './singletons/settings'
 import {link} from './objects/link'
 import {blockContent} from './objects/blockContent'
@@ -27,6 +28,7 @@ export const schemaTypes = [
   blockContentTextOnly,
   infoSection,
   faqSection,
+  pricingTable,
   callToAction,
   link,
 ]

@@ -62,6 +62,22 @@ export type CallToAction = {
   contentAlignment?: "textFirst" | "imageFirst";
 };
 
+export type PricingTable = {
+  _type: "pricingTable";
+  heading?: string;
+  subheading?: string;
+  plans: Array<{
+    name: string;
+    price?: string;
+    period?: string;
+    description?: string;
+    features?: Array<string>;
+    highlighted?: boolean;
+    _type: "plan";
+    _key: string;
+  }>;
+};
+
 export type FaqReference = {
   _ref: string;
   _type: "reference";
@@ -231,6 +247,9 @@ export type Page = {
     | ({
         _key: string;
       } & FaqSection)
+    | ({
+        _key: string;
+      } & PricingTable)
   >;
 };
 
@@ -529,6 +548,7 @@ export type AllSanitySchemaTypes =
   | Link
   | SanityImageAssetReference
   | CallToAction
+  | PricingTable
   | FaqReference
   | FaqSection
   | InfoSection
@@ -705,6 +725,22 @@ export type GetPageQueryResult = {
               markDefs: null;
             }
         > | null;
+      }
+    | {
+        _key: string;
+        _type: "pricingTable";
+        heading?: string;
+        subheading?: string;
+        plans: Array<{
+          name: string;
+          price?: string;
+          period?: string;
+          description?: string;
+          features?: Array<string>;
+          highlighted?: boolean;
+          _type: "plan";
+          _key: string;
+        }>;
       }
   > | null;
 } | null;
