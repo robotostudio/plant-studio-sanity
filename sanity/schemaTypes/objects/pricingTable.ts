@@ -1,5 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {TagIcon} from '@sanity/icons'
+import {PlanInput} from '../../components/PlanInput'
 
 /**
  * Page builder block that shows pricing plans side by side.
@@ -8,6 +9,7 @@ export const plan = defineType({
   name: 'plan',
   title: 'Plan',
   type: 'object',
+  components: {input: PlanInput},
   fields: [
     defineField({name: 'name', title: 'Name', type: 'string'}),
     defineField({name: 'description', title: 'Description', type: 'string'}),
