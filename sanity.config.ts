@@ -84,6 +84,11 @@ export default defineConfig({
               ],
             }),
           }),
+          review: defineLocations({
+            locations: [{title: 'Reviews', href: '/reviews'}],
+            message: 'Reviews show on the Reviews page',
+            tone: 'positive',
+          }),
           faq: defineLocations({
             locations: [homeLocation],
             message: 'FAQ entries show on the home page',

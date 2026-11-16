@@ -145,6 +145,18 @@ export type Button = {
   link?: Link;
 };
 
+export type Review = {
+  _id: string;
+  _type: "review";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  reviewer: string;
+  rating: number;
+  text: string;
+  date?: string;
+};
+
 export type Faq = {
   _id: string;
   _type: "faq";
@@ -535,6 +547,7 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | BlockContent
   | Button
+  | Review
   | Faq
   | Settings
   | SanityImageCrop
@@ -1054,6 +1067,17 @@ export type PostOgQueryResult = {
   } | null;
 } | null;
 
+// Source: sanity/lib/queries.ts
+// Variable: reviewsQuery
+// Query: *[_type == "review" && defined(rating)] | order(coalesce(date, _createdAt) desc) {    _id,    reviewer,    rating,    text,    "date": coalesce(date, _createdAt),  }
+export type ReviewsQueryResult = Array<{
+  _id: string;
+  reviewer: string;
+  rating: number;
+  text: string;
+  date: string;
+}>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -1074,5 +1098,6 @@ declare module "@sanity/client" {
     '\n  *[_type == "person" && slug.current == $slug] [0] {\n    \n  _id,\n  firstName,\n  lastName,\n  "slug": slug.current,\n  picture,\n  bio,\n  "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),\n\n    "posts": *[_type == "post" && references(^._id) && defined(slug.current)] | order(date desc, _updatedAt desc) {\n      \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n    }\n  }\n': AuthorQueryResult;
     '\n  *[_type == "faq" && defined(question)] | order(_createdAt asc) {\n    _id,\n    question,\n    answer\n  }\n': FaqQueryResult;
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    "title": coalesce(title, "Untitled"),\n    excerpt,\n    coverImage,\n    "date": coalesce(date, _updatedAt),\n    "author": author->{firstName, lastName},\n  }\n': PostOgQueryResult;
+    '\n  *[_type == "review" && defined(rating)] | order(coalesce(date, _createdAt) desc) {\n    _id,\n    reviewer,\n    rating,\n    text,\n    "date": coalesce(date, _createdAt),\n  }\n': ReviewsQueryResult;
   }
 }
