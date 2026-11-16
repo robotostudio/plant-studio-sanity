@@ -169,3 +169,13 @@ export const postOgQuery = defineQuery(`
     "author": author->{firstName, lastName},
   }
 `)
+
+export const reviewsQuery = defineQuery(`
+  *[_type == "review" && defined(rating)] | order(coalesce(date, _createdAt) desc) {
+    _id,
+    reviewer,
+    rating,
+    text,
+    "date": coalesce(date, _createdAt),
+  }
+`)
