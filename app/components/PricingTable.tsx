@@ -22,12 +22,12 @@ export default function PricingTable({block}: {block: ExtractPageBuilderType<'pr
         {plans.map((plan) => (
           <div
             key={plan._key}
-            className={`flex flex-col rounded-sm border p-8 ${
+            className={`relative flex flex-col rounded-sm border p-8 ${
               plan.highlighted ? 'border-black bg-white shadow-lg' : 'border-gray-200 bg-gray-50'
             }`}
           >
             {plan.discount && (
-              <span className="mb-4 self-start rounded-full bg-black px-3 py-1 font-mono text-xs text-white">
+              <span className="absolute -top-4 -right-3 rotate-3 rounded-full bg-black px-5 py-2 font-mono text-lg font-bold text-white shadow-lg sm:text-xl">
                 {plan.discount}
               </span>
             )}
