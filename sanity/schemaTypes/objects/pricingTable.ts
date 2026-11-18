@@ -15,6 +15,12 @@ export const plan = defineType({
     defineField({name: 'description', title: 'Description', type: 'string'}),
     defineField({name: 'price', title: 'Price', type: 'string'}),
     defineField({
+      name: 'discount',
+      title: 'Discount',
+      type: 'string',
+      description: 'Optional. For example: Save 20%',
+    }),
+    defineField({
       name: 'period',
       title: 'Billing period',
       type: 'string',

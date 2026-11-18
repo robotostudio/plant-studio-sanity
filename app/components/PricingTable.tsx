@@ -26,6 +26,11 @@ export default function PricingTable({block}: {block: ExtractPageBuilderType<'pr
               plan.highlighted ? 'border-black bg-white shadow-lg' : 'border-gray-200 bg-gray-50'
             }`}
           >
+            {plan.discount && (
+              <span className="mb-4 self-start rounded-full bg-black px-3 py-1 font-mono text-xs text-white">
+                {plan.discount}
+              </span>
+            )}
             <h3 className="text-xl text-gray-900">{plan.name}</h3>
             {plan.description && <p className="mt-2 text-gray-600">{plan.description}</p>}
             <p className="mt-6 flex items-baseline gap-2">

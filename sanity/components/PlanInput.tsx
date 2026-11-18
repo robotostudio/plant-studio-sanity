@@ -6,6 +6,7 @@ type Plan = {
   name?: string
   description?: string
   price?: string
+  discount?: string
   period?: string
   features?: string[]
   highlighted?: boolean
@@ -59,6 +60,18 @@ export function PlanInput(props: ObjectInputProps) {
             />
           </Stack>
         </Grid>
+
+        <Stack space={2}>
+          <Label size={1}>Discount</Label>
+          <Text size={1} muted>
+            Optional, shown as a badge on the plan. For example: Save 20%
+          </Text>
+          <TextInput
+            value={plan.discount ?? ''}
+            readOnly={readOnly}
+            onChange={(e) => setField('discount', e.currentTarget.value)}
+          />
+        </Stack>
 
         <Stack space={2}>
           <Label size={1}>Short description</Label>

@@ -78,6 +78,7 @@ export type Plan = {
   name?: string;
   description?: string;
   price?: string;
+  discount?: string;
   period?: string;
   features?: Array<string>;
   highlighted?: boolean;

@@ -369,6 +369,13 @@
           },
           "optional": true
         },
+        "discount": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
         "period": {
           "type": "objectAttribute",
           "value": {
