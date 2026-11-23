@@ -65,7 +65,7 @@ export const getPageQuery = defineQuery(`
       },
       _type == "faqSection" => {
         ...,
-        "items": items[]->{_id, question, answer}
+        "items": items[]->{_id, question, answer, citations[]{_key, title, url}}
       },
     },
   }
@@ -156,7 +156,8 @@ export const faqQuery = defineQuery(`
   *[_type == "faq" && defined(question)] | order(_createdAt asc) {
     _id,
     question,
-    answer
+    answer,
+    citations[]{_key, title, url}
   }
 `)
 
