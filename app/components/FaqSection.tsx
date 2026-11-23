@@ -5,7 +5,13 @@ import {dataAttr} from '@/sanity/lib/utils'
  * Presentational FAQ accordion. No server imports, so it can render inside the
  * client-side page builder as well as on the server-rendered home page.
  */
-export type FaqItem = {_id: string; question: string | null; answer: string | null}
+export type FaqCitation = {_key: string; title: string | null; url: string | null}
+export type FaqItem = {
+  _id: string
+  question: string | null
+  answer: string | null
+  citations?: FaqCitation[] | null
+}
 
 export function FaqList({
   heading,
@@ -41,6 +47,31 @@ export function FaqList({
               </span>
             </summary>
             <p className="px-6 pb-6 text-base leading-7 text-gray-600 max-w-[70ch]">{item.answer}</p>
+            {item.citations && item.citations.some((citation) => citation.title) && (
+              <div className="px-6 pb-6 -mt-2">
+                <p className="text-xs font-mono uppercase tracking-wide text-gray-500">Sources</p>
+                <ol className="mt-2 list-decimal pl-5 space-y-1 text-sm text-gray-600">
+                  {item.citations
+                    .filter((citation) => citation.title)
+                    .map((citation) => (
+                      <li key={citation._key}>
+                        {citation.url ? (
+                          <a
+                            href={citation.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline hover:text-gray-900"
+                          >
+                            {citation.title}
+                          </a>
+                        ) : (
+                          citation.title
+                        )}
+                      </li>
+                    ))}
+                </ol>
+              </div>
+            )}
           </details>
         ))}
       </div>

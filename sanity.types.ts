@@ -153,6 +153,12 @@ export type Faq = {
   _rev: string;
   question: string;
   answer: string;
+  citations?: Array<{
+    title: string;
+    url?: string;
+    _type: "citation";
+    _key: string;
+  }>;
 };
 
 export type Settings = {
@@ -611,7 +617,7 @@ export type SettingsQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: getPageQuery
-// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    heading,    subheading,    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {        ...,        button {          ...,            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }        }      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }          }        }      },      _type == "faqSection" => {        ...,        "items": items[]->{_id, question, answer}      },    },  }
+// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    heading,    subheading,    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {        ...,        button {          ...,            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }        }      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }          }        }      },      _type == "faqSection" => {        ...,        "items": items[]->{_id, question, answer, citations[]{_key, title, url}}      },    },  }
 export type GetPageQueryResult = {
   _id: string;
   _type: "page";
@@ -657,6 +663,11 @@ export type GetPageQueryResult = {
           _id: string;
           question: string;
           answer: string;
+          citations: Array<{
+            _key: string;
+            title: string;
+            url: string | null;
+          }> | null;
         }>;
       }
     | {
@@ -1026,11 +1037,16 @@ export type AuthorQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: faqQuery
-// Query: *[_type == "faq" && defined(question)] | order(_createdAt asc) {    _id,    question,    answer  }
+// Query: *[_type == "faq" && defined(question)] | order(_createdAt asc) {    _id,    question,    answer,    citations[]{_key, title, url}  }
 export type FaqQueryResult = Array<{
   _id: string;
   question: string;
   answer: string;
+  citations: Array<{
+    _key: string;
+    title: string;
+    url: string | null;
+  }> | null;
 }>;
 
 // Source: sanity/lib/queries.ts
@@ -1059,7 +1075,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '*[_type == "settings"][0]': SettingsQueryResult;
-    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n      _type == "faqSection" => {\n        ...,\n        "items": items[]->{_id, question, answer}\n      },\n    },\n  }\n': GetPageQueryResult;
+    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n      _type == "faqSection" => {\n        ...,\n        "items": items[]->{_id, question, answer, citations[]{_key, title, url}}\n      },\n    },\n  }\n': GetPageQueryResult;
     '\n  *[_type in ["page", "post", "person"] && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult;
     '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n  }\n': AllPostsQueryResult;
     '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0...5] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n  }\n': LatestPostsQueryResult;
@@ -1072,7 +1088,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "person" && defined(slug.current)] | order(firstName asc, lastName asc) {\n    \n  _id,\n  firstName,\n  lastName,\n  "slug": slug.current,\n  picture,\n  bio,\n  "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),\n\n  }\n': AuthorsQueryResult;
     '\n  *[_type == "person" && defined(slug.current)] {"slug": slug.current}\n': AuthorSlugsQueryResult;
     '\n  *[_type == "person" && slug.current == $slug] [0] {\n    \n  _id,\n  firstName,\n  lastName,\n  "slug": slug.current,\n  picture,\n  bio,\n  "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),\n\n    "posts": *[_type == "post" && references(^._id) && defined(slug.current)] | order(date desc, _updatedAt desc) {\n      \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n    }\n  }\n': AuthorQueryResult;
-    '\n  *[_type == "faq" && defined(question)] | order(_createdAt asc) {\n    _id,\n    question,\n    answer\n  }\n': FaqQueryResult;
+    '\n  *[_type == "faq" && defined(question)] | order(_createdAt asc) {\n    _id,\n    question,\n    answer,\n    citations[]{_key, title, url}\n  }\n': FaqQueryResult;
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    "title": coalesce(title, "Untitled"),\n    excerpt,\n    coverImage,\n    "date": coalesce(date, _updatedAt),\n    "author": author->{firstName, lastName},\n  }\n': PostOgQueryResult;
   }
 }
