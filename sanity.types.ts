@@ -62,6 +62,30 @@ export type CallToAction = {
   contentAlignment?: "textFirst" | "imageFirst";
 };
 
+export type RetroCta = {
+  _type: "retroCta";
+  heading: string;
+  subheading?: string;
+  bullets?: Array<string>;
+  button?: Button;
+  footer?: string;
+};
+
+export type ReviewCarousel = {
+  _type: "reviewCarousel";
+  heading?: string;
+  subheading?: string;
+  reviews: Array<{
+    rating: number;
+    title?: string;
+    quote: string;
+    author?: string;
+    role?: string;
+    _type: "review";
+    _key: string;
+  }>;
+};
+
 export type FaqReference = {
   _ref: string;
   _type: "reference";
@@ -231,6 +255,12 @@ export type Page = {
     | ({
         _key: string;
       } & FaqSection)
+    | ({
+        _key: string;
+      } & ReviewCarousel)
+    | ({
+        _key: string;
+      } & RetroCta)
   >;
 };
 
@@ -529,6 +559,8 @@ export type AllSanitySchemaTypes =
   | Link
   | SanityImageAssetReference
   | CallToAction
+  | RetroCta
+  | ReviewCarousel
   | FaqReference
   | FaqSection
   | InfoSection
@@ -611,7 +643,7 @@ export type SettingsQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: getPageQuery
-// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    heading,    subheading,    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {        ...,        button {          ...,            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }        }      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }          }        }      },      _type == "faqSection" => {        ...,        "items": items[]->{_id, question, answer}      },    },  }
+// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    heading,    subheading,    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {        ...,        button {          ...,            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }        }      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }          }        }      },      _type == "faqSection" => {        ...,        "items": items[]->{_id, question, answer}      },      _type == "retroCta" => {        ...,        button {          ...,            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }        }      },    },  }
 export type GetPageQueryResult = {
   _id: string;
   _type: "page";
@@ -705,6 +737,41 @@ export type GetPageQueryResult = {
               markDefs: null;
             }
         > | null;
+      }
+    | {
+        _key: string;
+        _type: "retroCta";
+        heading: string;
+        subheading?: string;
+        bullets?: Array<string>;
+        button: {
+          _type: "button";
+          buttonText?: string;
+          link: {
+            _type: "link";
+            linkType?: "href" | "page" | "post";
+            href?: string;
+            page: string | null;
+            post: string | null;
+            openInNewTab?: boolean;
+          } | null;
+        } | null;
+        footer?: string;
+      }
+    | {
+        _key: string;
+        _type: "reviewCarousel";
+        heading?: string;
+        subheading?: string;
+        reviews: Array<{
+          rating: number;
+          title?: string;
+          quote: string;
+          author?: string;
+          role?: string;
+          _type: "review";
+          _key: string;
+        }>;
       }
   > | null;
 } | null;
@@ -1059,7 +1126,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '*[_type == "settings"][0]': SettingsQueryResult;
-    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n      _type == "faqSection" => {\n        ...,\n        "items": items[]->{_id, question, answer}\n      },\n    },\n  }\n': GetPageQueryResult;
+    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n      _type == "faqSection" => {\n        ...,\n        "items": items[]->{_id, question, answer}\n      },\n      _type == "retroCta" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n    },\n  }\n': GetPageQueryResult;
     '\n  *[_type in ["page", "post", "person"] && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult;
     '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n  }\n': AllPostsQueryResult;
     '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) [0...5] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n  }\n': LatestPostsQueryResult;
