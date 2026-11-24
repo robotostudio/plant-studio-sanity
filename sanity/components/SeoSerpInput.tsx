@@ -241,7 +241,9 @@ export function PostInputWithSerp(props: ObjectInputProps) {
             padding: 16,
             borderRadius: 6,
             border: '1px solid #dadce0',
-            background: '#fff',
+            // A soft rainbow, light enough to keep the text easy to read.
+            background:
+              'linear-gradient(90deg, #ffd6d6, #ffe7c7, #fff8c4, #d9f7d0, #d4ecff, #e3dcff, #f6d9ff)',
             color: '#202124',
             overflow: 'hidden',
           }}
