@@ -67,6 +67,13 @@ export const getPageQuery = defineQuery(`
         ...,
         "items": items[]->{_id, question, answer}
       },
+      _type == "retroCta" => {
+        ...,
+        button {
+          ...,
+          ${linkFields}
+        }
+      },
     },
   }
 `)
