@@ -24,6 +24,9 @@ export default async function Page() {
           <div className="container">
             <div className="relative min-h-[40svh] mx-auto max-w-2xl pt-10 xl:pt-20 pb-30 space-y-6 lg:max-w-4xl lg:px-12 flex flex-col items-center justify-center">
               <div className="flex flex-col gap-4 items-center">
+                <span className="rounded-full border border-black bg-white px-4 py-1 font-mono text-sm text-black">
+                  Starter template
+                </span>
                 <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-black text-center">
                   {settings?.title || demo.title}
                 </h1>
