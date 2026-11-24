@@ -119,6 +119,8 @@ export const postQuery = defineQuery(`
       ${linkReference}
     }
   },
+    seoTitle,
+    seoDescription,
     ${postFields}
   }
 `)

@@ -2,6 +2,7 @@ import {DocumentTextIcon} from '@sanity/icons'
 import {format, parseISO} from 'date-fns'
 import {defineField, defineType} from 'sanity'
 import type {Post} from '../../../sanity.types'
+import {PostInputWithSerp} from '../../components/SeoSerpInput'
 
 /**
  * Post schema.  Define and edit the fields for the 'post' content type.
@@ -13,6 +14,8 @@ export const post = defineType({
   title: 'Post',
   icon: DocumentTextIcon,
   type: 'document',
+  // Shows the SEO fields as an editable search result below the other fields.
+  components: {input: PostInputWithSerp},
   fields: [
     defineField({
       name: 'title',
@@ -82,6 +85,19 @@ export const post = defineType({
       title: 'Author',
       type: 'reference',
       to: [{type: 'person'}],
+    }),
+    defineField({
+      name: 'seoTitle',
+      title: 'SEO title',
+      type: 'string',
+      description: 'The title search engines show. Left empty, the post title is used.',
+    }),
+    defineField({
+      name: 'seoDescription',
+      title: 'SEO description',
+      type: 'text',
+      rows: 3,
+      description: 'The description search engines show. Left empty, the excerpt is used.',
     }),
   ],
   // List preview configuration. https://www.sanity.io/docs/previews-list-views
