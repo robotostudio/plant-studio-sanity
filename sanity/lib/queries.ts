@@ -120,6 +120,8 @@ export const postQuery = defineQuery(`
     }
   },
     ${postFields}
+    "seoTitle": seo.seoTitle,
+    "seoDescription": seo.seoDescription,
   }
 `)
 

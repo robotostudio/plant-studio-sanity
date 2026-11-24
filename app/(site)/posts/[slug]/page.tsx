@@ -43,8 +43,9 @@ export async function generateMetadata(props: PageProps<'/posts/[slug]'>): Promi
       post?.author?.firstName && post?.author?.lastName
         ? [{name: `${post.author.firstName} ${post.author.lastName}`}]
         : [],
-    title: post?.title,
-    description: post?.excerpt,
+    // An SEO title is used as written; otherwise the post title gets the site name appended.
+    title: post?.seoTitle ? {absolute: post.seoTitle} : post?.title,
+    description: post?.seoDescription || post?.excerpt,
   } satisfies Metadata
 }
 

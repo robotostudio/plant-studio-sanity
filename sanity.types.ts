@@ -261,6 +261,10 @@ export type Post = {
   };
   date?: string;
   author?: PersonReference;
+  seo?: {
+    seoTitle?: string;
+    seoDescription?: string;
+  };
 };
 
 export type Person = {
@@ -869,7 +873,7 @@ export type PostsCountQueryResult = number;
 
 // Source: sanity/lib/queries.ts
 // Variable: postQuery
-// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture, "slug": slug.current},  }
+// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture, "slug": slug.current},    "seoTitle": seo.seoTitle,    "seoDescription": seo.seoDescription,  }
 export type PostQueryResult = {
   content: Array<
     | {
@@ -932,6 +936,8 @@ export type PostQueryResult = {
     };
     slug: string;
   } | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
 } | null;
 
 // Source: sanity/lib/queries.ts
@@ -1066,7 +1072,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n  }\n': MorePostsQueryResult;
     '\n  *[\n  _type == "post" && defined(slug.current) && ($q == "" || title match $q || excerpt match $q)\n] | order(date desc, _updatedAt desc) [$start...$end] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n  }\n': PostsQueryResult;
     'count(*[\n  _type == "post" && defined(slug.current) && ($q == "" || title match $q || excerpt match $q)\n])': PostsCountQueryResult;
-    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n  }\n': PostQueryResult;
+    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture, "slug": slug.current},\n\n    "seoTitle": seo.seoTitle,\n    "seoDescription": seo.seoDescription,\n  }\n': PostQueryResult;
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult;
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult;
     '\n  *[_type == "person" && defined(slug.current)] | order(firstName asc, lastName asc) {\n    \n  _id,\n  firstName,\n  lastName,\n  "slug": slug.current,\n  picture,\n  bio,\n  "postCount": count(*[_type == "post" && references(^._id) && defined(slug.current)]),\n\n  }\n': AuthorsQueryResult;
